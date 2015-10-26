@@ -1,4 +1,8 @@
 <?php session_start();
+if(!isset($_GET['page']))
+{
+    header('location: index.php?page=content');
+}
 
 if(!isset($_SESSION['user']))
 {
@@ -6,7 +10,7 @@ $flag=0;
 $_SESSION['lev']="X";
 $_SESSION['ques']="";
 }
-else if(isset($_SESSION['user'])||$_SESSION['user']=="")
+else if(isset($_SESSION['user']))
 {
     $flag=1;	
 }
@@ -45,7 +49,8 @@ $(document).ready(function () {
     $(".register").hide();
     $(".battleground").hide();
     $(".leaderboard").hide();
-    	<?php if((!$flag==1)&&($_GET['page']=="battleground")){?>
+    	<?php if(!$flag==1){
+         if( isset($_GET['page'])&& $_GET['page']=="battleground"){?>
 		window.history.pushState('obj', '', '?page=login');
 		 $(".content").hide();
         $(".login").fadeIn(500);
@@ -53,20 +58,40 @@ $(document).ready(function () {
         $(".battleground").hide();
         $(".leaderboard").hide();
 		<?php } ?>
-		<?php if(((!$flag==1)&&($_GET['page']=="leaderboard"))||((!$flag==1)&&($_GET['page']=="battleground"))){?>
+		<?php if((isset($_GET['page']) &&($_GET['page']=="leaderboard"))||(isset($_GET['page']) &&($_GET['page']=="battleground"))){?>
 		window.history.pushState('obj', '', '?page=login');
 		 $(".content").hide();
         $(".login").fadeIn(500);
         $(".register").hide();
         $(".battleground").hide();
         $(".leaderboard").hide();
-		<?php } 
+		<?php }
+        if (!isset($_GET['page'])){?>
+        $(".content").hide();
+        $(".login").hide();
+        $(".register").hide();
+        $(".battleground").hide();
+        $(".leaderboard").hide();
+        $(".content").fadeIn(500);
+        <?php }
+        }
 		 else 
-		 { if(isset($_GET['page']) && $_GET['page']!=''){?>
-			$(".<?php echo $_GET['page'];?>").fadeIn(500);
-		<?php }else{?>
-			$(".content").fadeIn(500);
-		<?php }}?>
+		 { if (!isset($_GET['page'])){?>
+        $(".content").hide();
+        $(".login").hide();
+        $(".register").hide();
+        $(".battleground").hide();
+        $(".leaderboard").hide();
+        $(".content").fadeIn(500);
+		<?php }
+         if (isset($_GET['page'])&&($_GET['page']=="content")){?>
+        $(".content").hide();
+        $(".login").hide();
+        $(".register").hide();
+        $(".battleground").hide();
+        $(".leaderboard").hide();
+        $(".content").fadeIn(500);
+        <?php }}?>
 
     
     
@@ -216,7 +241,7 @@ $(document).ready(function () {
             Enter your login details:
                 <br/><br/>
                     <span class="input input--akira"  id="text_box" >
-					<input required class="input__field input__field--akira" type="email" name="email" id="input-22" value="<?php echo $_SESSION['email']?>" style="border-width:0px;padding:0px;" id="zx"/>
+					<input required class="input__field input__field--akira" type="email" name="email" id="input-22" value="<?php if(isset($_SESSION['email'])) echo $_SESSION['email'];?>" style="border-width:0px;padding:0px;" id="zx"/>
 					<label class="input__label input__label--akira" for="input-22">
 						<span class="input__label-content input__label-content--akira" id="hint">Email Address</span>
 					</label>
@@ -228,9 +253,9 @@ $(document).ready(function () {
 						<span class="input__label-content input__label-content--akira" id="hint">Password</span>
 					</label>
 				</span>
-                <span style="display:block;" class="error" id="err_login"><button id="button_login" class="btn btn-1 btn-1e" type="submit"  name="button_login">Log in</button><br> <?php echo $_SESSION['err'];?>  </span>
+                <span style="display:block;" class="error" id="err_login"><button id="button_login" class="btn btn-1 btn-1e" type="submit"  name="button_login">Log in</button><br> <?php if(isset($_SESSION['err'])) echo $_SESSION['err'];?>  </span>
                     
-                    <?php  $_SESSION['err']="";?>
+                    <?php if(isset($_SESSION['err'])) $_SESSION['err']="";?>
                     
                 </p>
                 </div>
@@ -247,14 +272,14 @@ $(document).ready(function () {
                     
 					<tr>
                         <td style="width:50%"><span class="input_r input--akira_r" id="text_box3"  style="width:90%;">
-					<input required class="input__field_r input__field--akira_r" type="text" id="input-22"  style="border-width:0px;padding:0px;" name="fname" value="<?php echo $_SESSION['name1'];?>"   />
+					<input required class="input__field_r input__field--akira_r" type="text" id="input-22"  style="border-width:0px;padding:0px;" name="fname" value="<?php if(isset($_SESSION['name1'])) echo $_SESSION['name1'];?>"   />
 					<label class="input__label_r input__label--akira_r" for="input-22">
-						<span class="input__label-content_r input__label-content--akira_r" id="hint">FIRST NAME</span>
+						<span class="input__label-content_r input__label-content--akira_r" id="hint">FIRST NAME</span> 
 					</label>
                             </span>
                         </td> 
                         <td style="width:50%"><span class="input_r input--akira_r" id="text_box4"  style="width:90%;">
-					<input required class="input__field_r input__field--akira_r" type="text" id="input-22"  style="border-width:0px;padding:0px;" name="lname" value="<?php echo $_SESSION['name2'];?>"   />
+					<input required class="input__field_r input__field--akira_r" type="text" id="input-22"  style="border-width:0px;padding:0px;" name="lname" value="<?php if(isset($_SESSION['name2'])) echo $_SESSION['name2'];?>"   />
 					<label class="input__label_r input__label--akira_r" for="input-22">
 						<span class="input__label-content_r input__label-content--akira_r" id="hint">LAST NAME</span>
 					</label>
@@ -264,14 +289,14 @@ $(document).ready(function () {
                     
                     <tr>
                         <td><span class="input_r input--akira_r" id="text_box5" style="width:90%;">
-					<input required class="input__field_r input__field--akira_r" type="email" id="input-22"  style="border-width:0px;padding:0px;" name="email" value="<?php echo $_SESSION['mail'];?>"  />
+					<input required class="input__field_r input__field--akira_r" type="email" id="input-22"  style="border-width:0px;padding:0px;" name="email" value="<?php if(isset($_SESSION['mail'])) echo $_SESSION['mail'];?>"  />
 					<label class="input__label_r input__label--akira_r" for="input-22">
 						<span class="input__label-content_r input__label-content--akira_r" id="hint">EMAIL ADDRESS</span>
 					</label>
                             </span>
                         </td> 
                         <td><span class="input_r input--akira_r" id="text_box6" style="width:90%;">
-					<input required class="input__field_r input__field--akira_r" type="text" id="input-22"  name="college" style="border-width:0px;padding:0px;" value="<?php echo $_SESSION['clg'];?>"  />
+					<input required class="input__field_r input__field--akira_r" type="text" id="input-22"  name="college" style="border-width:0px;padding:0px;" value="<?php if(isset($_SESSION['clg'])) echo $_SESSION['clg'];?>"  />
 					<label class="input__label_r input__label--akira_r" for="input-22">
 						<span class="input__label-content_r input__label-content--akira_r" id="hint">COLLEGE</span>
 					</label>
@@ -297,9 +322,9 @@ $(document).ready(function () {
                     </tr>
                     
 					
-                    <tr><td colspan="2" id="err_register" class="error"><p style="display:block;text-align:center;margin:0px;"><?php echo $_SESSION['err2'];?></p></td></tr>
+                    <tr><td colspan="2" id="err_register" class="error"><p style="display:block;text-align:center;margin:0px;"><?php if(isset($_SESSION['err2'])) echo $_SESSION['err2'];?></p></td></tr>
                     <tr><td colspan="2"><button type="submit" class="btn btn-1 btn-1e" id="regist" name="regist" style="display:block;text-align:center;margin:auto;">Register</button></td></tr>
-					<?php  $_SESSION['err2']="";?>
+					<?php if(isset($_SESSION['err2'])) $_SESSION['err2']="";?>
 
 				</table>
 			</form>
@@ -311,7 +336,7 @@ $(document).ready(function () {
                 <form action = "che.php" method = "post" id="input">
                 <div class="battleground" id="xx" style="height:100%;width:100%;margin:0px;"><div style="display:table-cell;padding:0px;margin:0px;height:100%;width:100%;position:relative;">
                     <table style="height:100%;width:100%;">
-                       <tr class="table_battle"><td style="text-transform: uppercase;font-weight: 700;">level :<?php echo $_SESSION['lev']; ?></td></tr>
+                       <tr class="table_battle"><td style="text-transform: uppercase;font-weight: 700;">level :<?php  echo $_SESSION['lev']; ?></td></tr>
                         <tr class="table_battle"><td rowspan="8" style="height:325px;"><p id="ques" style="overflow:auto;"><?php echo $_SESSION['ques']; ?></p></td></tr>
                        <tr class="table_battle"></tr>
                         <tr class="table_battle"></tr>
@@ -324,7 +349,7 @@ $(document).ready(function () {
                         <tr class="table_battle"><td><input type="text" name="ans" value="<?php echo $_SESSION['answ'];?>"/></td></tr>
 						
                         <tr class="table_battle"><td><button id="submit" class="btn btn-1 btn-1e" name="submit">Submit</button></td></tr>
-                        <tr class="table_battle"><td><span id="err_battle" class="error"> <?php echo $_SESSION['err3'];?></span></td></tr>
+                        <tr class="table_battle"><td><span id="err_battle" class="error"> <?php  if(isset($_SESSION['err3'])) echo $_SESSION['err3'];?></span></td></tr>
                     </table>
                 </div>
 		</div>
@@ -462,8 +487,53 @@ $(document).ready(function () {
 
 </html>
 <?php 
-	$_SESSION['err']="";$_SESSION['answ']="";
-	$_SESSION['mail']="";$_SESSION['clg']="";$_SESSION['name2']="";$_SESSION['name1']="";
+if(isset($_SESSION['err']))
+	
+    {
+        $_SESSION['err']="";
+    }
+
+if(isset($_SESSION['answ']))
+    
+    {
+
+    $_SESSION['answ']="";
+    }
+    if(isset($_SESSION['mail']))
+    
+    {
+
+
+	$_SESSION['mail']="";
+    }
+    if(isset($_SESSION['clg']))
+    
+    {
+
+    $_SESSION['clg']="";
+    }
+    if(isset($_SESSION['name2']))
+    
+    {
+
+    $_SESSION['name2']="";
+    }
+if(isset($_SESSION['name1']))
+    
+    {
+
+    $_SESSION['name1']="";
+    }
+if(isset($_SESSION['err2']))
+    
+    {
+
 	$_SESSION['err2']="";
+    }
+    if(isset($_SESSION['err3']))
+    
+    {
+
 	$_SESSION['err3']="";
+    }
 ?>

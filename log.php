@@ -30,7 +30,11 @@
 		$_SESSION['user']=$fnd['FirstName']." ".$fnd['LastName'];
 		$_SESSION['email']=$fnd['Email'];
 		$_SESSION['lev']=$fnd['level'];
+		if(isset($_SESSION['err']))
+		{
 		$_SESSION['err']="";
+		unset($_SESSION['err']);
+		}
 		$_SESSION['current']=".content";
 	}
 	header("location:fetch.php");
